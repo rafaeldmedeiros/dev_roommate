@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  birth_date    DateTime?
+  email         String    @unique
+  phone         String
+  profession    String?
+  gender        String?
+  admin         Boolean
+  password_hash String
+
+  house     House?      @relation(fields: [house_id], references: [id])
+  house_id  String?
+  UserRules UserRules[]
+
+  @@map("users")
+}
+
+model House {
+  id      String    @id @default(uuid())
+  name    String
+  Users   User[]
+  Expense Expense[]
+  Rule    Rule[]
+
+  @@map("houses")
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  description String
+  value       Float
+  due_date    DateTime
+
+  house    House  @relation(fields: [house_id], references: [id])
+  house_id String
+
+  @@map("expenses")
+}
+
+model Rule {
+  id          String  @id @default(uuid())
+  description String
+  accepted    Boolean
+
+  house     House       @relation(fields: [house_id], references: [id])
+  house_id  String
+  UserRules UserRules[]
+
+  @@map("rules")
+}
+
+model UserRules {
+  id    String @id @default(uuid())
+  users User   @relation(fields: [fk_id_user], references: [id])
+  rule  Rule   @relation(fields: [fk_id_rule], references: [id])
+
+  fk_id_user String
+  fk_id_rule String
+
+  @@map("users_rules")
+}
