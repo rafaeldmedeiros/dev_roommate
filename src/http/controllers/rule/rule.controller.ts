@@ -15,10 +15,10 @@ export async function createRule(request: FastifyRequest, reply: FastifyReply) {
     const createRuleParamSchemma = z.object({
         houseId: z.string().uuid()
     });
-    const { description, accepted } = createRuleBodySchemma.parse(request.body);
+    const { description } = createRuleBodySchemma.parse(request.body);
     const { houseId } = createRuleParamSchemma.parse(request.params);
 
-    await ruleUseCase.create({ description, accepted, houseId });
+    await ruleUseCase.create({ description, houseId });
 
     return reply.status(201).send();
 }
@@ -35,3 +35,23 @@ export async function findByHouseId(request: FastifyRequest, reply: FastifyReply
     return reply.status(200).send(rules);
 
 }
+
+export async function accept(request: FastifyRequest, reply: FastifyReply) {
+
+    const acceptRuleBody = z.object({
+        userId: z.string().uuid(),
+    });
+
+    const acceptRule = z.object({
+        ruleId: z.string().uuid(),
+    });
+    const { ruleId } = acceptRule.parse(request.params);
+    const { userId } = acceptRuleBody.parse(request.body);
+
+
+    await ruleRepository.acceptRule(ruleId, userId);
+
+    return reply.status(200).send();
+
+}
+

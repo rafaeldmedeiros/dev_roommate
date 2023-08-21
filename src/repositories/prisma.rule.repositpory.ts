@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { RulesRepository } from './prisma/rules-repository';
 import { prisma } from '@/lib/prisma';
-import { GetResult } from '@prisma/client/runtime';
 
 export class PrismaRuleRepository implements RulesRepository {
     async create(data: Prisma.RuleUncheckedCreateInput) {
@@ -14,9 +13,31 @@ export class PrismaRuleRepository implements RulesRepository {
         const rules = await prisma.rule.findMany({
             where: {
                 house_id: id
+            },
+            include: {
+                UserRules: true
             }
         });
 
         return rules;
+    }
+
+    async acceptRule(id: string, userId: string) {
+        await prisma.rule.update({
+            where: {
+                id
+            },
+            data: {
+                UserRules: {
+                    create: {
+                        users: {
+                            connect: {
+                                id: userId
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 }

@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { createHouse, findHouseById } from './controllers/house/house.controller';
-import { createRule, findByHouseId } from './controllers/rule/rule.controller';
+import { accept, createRule, findByHouseId } from './controllers/rule/rule.controller';
 import { authenticate } from './controllers/user/auth.controller';
 import { findUserById, register } from './controllers/user/user.controller';
 import { verifyJWT } from './middlwares/verify.jwt';
@@ -24,6 +24,9 @@ export async function appRoutes(app: FastifyInstance) {
     app.post('/:houseId/rule', { onRequest: [verifyJWT] }, createRule);
 
     app.get('/rule/:houseId', { onRequest: [verifyJWT] }, findByHouseId);
+
+    app.put('/rule/accept/:ruleId', { onRequest: [verifyJWT] }, accept);
+
 
 
 }

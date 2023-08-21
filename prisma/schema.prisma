@@ -48,12 +48,12 @@ model Expense {
 }
 
 model Rule {
-  id          String  @id @default(uuid())
+  id          String @id @default(uuid())
   description String
-  accepted    Boolean
 
-  house     House       @relation(fields: [house_id], references: [id])
-  house_id  String
+  house    House  @relation(fields: [house_id], references: [id])
+  house_id String
+
   UserRules UserRules[]
 
   @@map("rules")
