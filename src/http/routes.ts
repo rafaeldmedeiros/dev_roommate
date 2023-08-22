@@ -5,6 +5,7 @@ import { authenticate } from './controllers/user/auth.controller';
 import { findUserById, register } from './controllers/user/user.controller';
 import { verifyJWT } from './middlwares/verify.jwt';
 import { verifyIsAdmin } from './middlwares/verify-is-admin';
+import { createExpense, findByExpenseId } from './controllers/expense/expense.controller';
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -21,12 +22,12 @@ export async function appRoutes(app: FastifyInstance) {
     app.post('/house', { onRequest: [verifyJWT, verifyIsAdmin] }, createHouse);
     app.get('/house/:id', { onRequest: [verifyJWT] }, findHouseById);
 
+    //Rules routes
     app.post('/:houseId/rule', { onRequest: [verifyJWT] }, createRule);
-
     app.get('/rule/:houseId', { onRequest: [verifyJWT] }, findByHouseId);
-
     app.put('/rule/accept/:ruleId', { onRequest: [verifyJWT] }, accept);
 
-
-
+    //Expenses Routes
+    app.post('/:houseId/expense', { onRequest: [verifyJWT] }, createExpense);
+    app.get('/expense/:houseId', { onRequest: [verifyJWT] }, findByExpenseId);
 }

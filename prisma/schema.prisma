@@ -36,10 +36,10 @@ model House {
 }
 
 model Expense {
-  id          String   @id @default(uuid())
+  id          String @id @default(uuid())
   description String
   value       Float
-  due_date    DateTime
+  due_date    String
 
   house    House  @relation(fields: [house_id], references: [id])
   house_id String
