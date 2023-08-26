@@ -6,6 +6,7 @@ import { findUserById, register } from './controllers/user/user.controller';
 import { verifyJWT } from './middlwares/verify.jwt';
 import { verifyIsAdmin } from './middlwares/verify-is-admin';
 import { createExpense, findByExpenseId } from './controllers/expense/expense.controller';
+import { createEvent, findEvenByUserId } from './controllers/event/event.controller';
 
 export async function appRoutes(app: FastifyInstance) {
 
@@ -30,4 +31,9 @@ export async function appRoutes(app: FastifyInstance) {
     //Expenses Routes
     app.post('/:houseId/expense', { onRequest: [verifyJWT] }, createExpense);
     app.get('/expense/:houseId', { onRequest: [verifyJWT] }, findByExpenseId);
+
+    //Event Route
+    app.post('/:userId/event', { onRequest: [verifyJWT] }, createEvent);
+    app.get('/event/:userId', { onRequest: [verifyJWT] }, findEvenByUserId);
+
 }

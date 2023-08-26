@@ -21,6 +21,7 @@ model User {
   house     House?      @relation(fields: [house_id], references: [id])
   house_id  String?
   UserRules UserRules[]
+  Event     Event[]
 
   @@map("users")
 }
@@ -68,4 +69,12 @@ model UserRules {
   fk_id_rule String
 
   @@map("users_rules")
+}
+
+model Event {
+  id          String @id @default(uuid())
+  description String
+  event_date  String
+  user        User?  @relation(fields: [user_id], references: [id])
+  user_id     String
 }
