@@ -9,11 +9,13 @@ export class PrismaEventRepository implements EventRepository {
         return event;
     }
 
-    async list(id: string) {
+    async list(id: string, event_date: string) {
         const event = await prisma.event.findMany({
             where: {
-                user_id: id
+                user_id: id,
+                event_date
             },
+
         });
 
         return event;

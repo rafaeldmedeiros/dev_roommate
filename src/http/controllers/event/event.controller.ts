@@ -28,9 +28,15 @@ export async function findEvenByUserId(request: FastifyRequest, reply: FastifyRe
     const findEventSchema = z.object({
         userId: z.string().uuid(),
     });
-    const { userId } = findEventSchema.parse(request.params);
 
-    const event = await eventUseCase.findEventById(userId);
+    const findEventSchemaQuery = z.object({
+        event_date: z.string(),
+    });
+
+    const { userId } = findEventSchema.parse(request.params);
+    const { event_date } = findEventSchemaQuery.parse(request.query);
+
+    const event = await eventUseCase.findEventById(userId, event_date);
 
     return reply.status(200).send(event);
 

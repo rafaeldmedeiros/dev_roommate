@@ -17,7 +17,7 @@ export class EventUseCase {
         });
     }
 
-    async findEventById(id: string) {
-        return await this.eventRepository.list(id);
+    async findEventById(id: string, event_date: string) {
+        return await this.eventRepository.list(id, event_date);
     }
 }
